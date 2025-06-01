@@ -1,0 +1,212 @@
+@import url('https://fonts.googleapis.com/css2?family=Coiny&display=swap');
+
+/* 🌸 Container principal */
+.prof-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  background-color: #FFD1E5;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  overflow: hidden;
+}
+
+/* 📁 Sidebar com estilo da tela Paciente */
+.prof-sidebar {
+  background-color: #FFD1E5;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
+  transition: width 0.3s ease;
+  overflow: hidden;
+  box-shadow: 2px 0 8px rgba(232, 114, 154, 0.4);
+}
+
+.prof-sidebar.open {
+  width: 120px;
+}
+
+.prof-sidebar.closed {
+  width: 50px;
+}
+
+.prof-menu-icon img {
+  width: 30px;
+  height: 30px;
+}
+
+.prof-home-icon img {
+  width: 40px;
+  height: 40px;
+  margin-top: 40px;
+}
+
+/* 🌸 Conteúdo principal */
+.prof-main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+  padding: 20px 0;
+  background-color: #FFFFFF; /* fundo branco */
+}
+
+/* 🐱 Cabeçalho com logo centralizado */
+.prof-header {
+  padding: 15px 0;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.prof-kitty-logo {
+  width: 100px;
+  height: 100px;
+}
+
+/* 🌸 Linha decorativa */
+.prof-divider {
+  height: 2px;
+  background-color: #E8729A;
+  width: 100%;
+  box-shadow: 0 2px 6px rgba(232, 114, 154, 0.4);
+  margin-bottom: 20px;
+}
+
+/* 📋 Container das consultas */
+.prof-consultas-container {
+  padding: 20px;
+  background-color: #ffe6f0;
+  border-radius: 20px;
+  max-width: 900px;
+  width: 100%;
+}
+
+.prof-consultas-title {
+  font-size: 28px;
+  color: #d94f84;
+  margin-bottom: 30px;
+  text-align: left;
+  font-family: 'Coiny', cursive;
+}
+
+/* 📄 Card de consulta */
+.prof-consulta-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 15px 20px;
+  box-shadow: 4px 6px 12px rgba(0, 0, 0, 0.2);
+  margin-bottom: 20px;
+}
+
+.prof-consulta-dia {
+  background-color: #ffd1e5;
+  color: #d94f84;
+  font-weight: bold;
+  font-size: 20px;
+  border-radius: 10px;
+  padding: 10px 16px;
+  margin-right: 15px;
+}
+
+.prof-consulta-info {
+  flex: 1;
+  color: #444;
+  font-family: 'Comic Sans MS', cursive;
+}
+
+.prof-consulta-info strong {
+  display: block;
+  font-size: 16px;
+  color: #d94f84;
+  margin-bottom: 2px;
+}
+
+.prof-consulta-botoes {
+  display: flex;
+  gap: 10px;
+}
+
+.prof-btn-remarcar,
+.prof-btn-cancelar {
+  border: none;
+  background-color: #F6699B;
+  color: white;
+  font-weight: bold;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  cursor: pointer;
+  font-family: 'Comic Sans MS', cursive;
+  box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.prof-btn-remarcar:hover,
+.prof-btn-cancelar:hover {
+  background-color: #e05589;
+}
+
+/* 💖 Botão Ver Mais - Rosa e Arredondado */
+.horarios-vermais-botao {
+  background-color: #F6699B;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-family: 'Comic Sans MS', cursive;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s;
+}
+
+.horarios-vermais-botao:hover {
+  background-color: #e05589;
+}
+
+/* 🔍 Barra de Filtro */
+.prof-filtros-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+.prof-filtros-container input {
+  padding: 10px 15px;
+  border: 2px solid #ffd1e5;
+  border-radius: 12px;
+  font-family: 'Comic Sans MS', cursive;
+  font-size: 14px;
+  background-color: #fff0f5;
+  color: #d94f84;
+  outline: none;
+  transition: border 0.3s;
+}
+
+.prof-filtros-container input:focus {
+  border-color: #e8729a;
+}
+
+.prof-barra-pesquisa {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+.prof-barra-pesquisa input {
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px solid #d94f84;
+  font-family: 'Comic Sans MS', cursive;
+  font-size: 14px;
+  width: 100%;
+  max-width: 280px;
+}

@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Coiny&display=swap');
+
+.cadastro-prof-bg {
+  width: 100vw;
+  height: 100vh;
+  background: #FFD1E5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+}
+
+.cadastro-prof-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.cadastro-prof-form {
+  display: flex;
+  flex-direction: column;
+  width: 280px;
+  margin-right: 24px;
+  padding: 16px 12px;
+  background: transparent;
+  border-radius: 12px;
+}
+
+.cadastro-prof-form h1 {
+  font-family: 'Coiny', cursive, sans-serif;
+  font-size: 2rem;
+  margin-bottom: 16px;
+  color: #d63384;
+  font-weight: bold;
+  text-align: left;
+}
+
+.cadastro-prof-form label {
+  font-size: 1rem;
+  color: #d63384;
+  margin-bottom: 4px;
+  margin-top: 10px;
+}
+
+.cadastro-prof-form input,
+.cadastro-prof-form select {
+  width: 100%;
+  padding: 8px 10px;
+  border: 2px solid #E8729A;
+  border-radius: 8px;
+  background: #fff0f6;
+  font-size: 1rem;
+  color: #d63384;
+  margin-bottom: 10px;
+  outline: none;
+}
+
+.cadastro-prof-form button {
+  margin-top: 14px;
+  padding: 12px 0;
+  border: none;
+  border-radius: 20px;
+  background: #d63384;
+  color: #fff;
+  font-size: 25px;
+  font-weight: bold;
+  cursor: pointer;
+  font-family: 'Coiny', cursive, sans-serif;
+}
+
+.cadastro-prof-form button:hover {
+  background: #c8577c;
+}
+
+.ja-tem-conta-prof-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+.ja-tem-conta-prof-link {
+    color: #c84b84;
+    font-size: 24px;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  .ja-tem-conta-prof-link:hover {
+    text-decoration: underline;
+    color: #c84b84;         /* 🔧 mantém a mesma cor */
+  }
+  
+
+.kitty-prof-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.kitty-prof-area img {
+  height: 300px;
+}

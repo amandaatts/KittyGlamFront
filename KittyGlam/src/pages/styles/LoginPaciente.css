@@ -1,0 +1,78 @@
+.horarios-paciente-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  background-color: #FFD1E5; /* rosa claro */
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+}
+
+.horarios-paciente-sidebar {
+  width: 20%;
+  min-width: 200px;
+  background-color: #fbb1d0; /* rosa mais forte pro menu */
+  padding: 20px;
+}
+
+.horarios-paciente-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 40px;
+  background-color: #FFD1E5; /* Garante que o fundo rosa continue no conteúdo */
+  overflow-y: auto;
+}
+
+.horarios-paciente-title {
+  font-size: 36px;
+  color: #d63384;
+  font-family: 'Coiny', cursive;
+  margin-bottom: 32px;
+}
+
+.horarios-paciente-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center; /* centraliza os cards */
+}
+
+.horario-card-paciente {
+  background-color: white;
+  padding: 24px;
+  border-radius: 16px;
+  width: 400px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.horario-card-paciente strong {
+  font-size: 20px;
+  color: #d63384;
+}
+
+.horario-card-paciente .botoes {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.horario-card-paciente button {
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-family: 'Coiny', cursive;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  color: white;
+  transition: 0.2s ease-in-out;
+}
+
+.horario-card-paciente .remarcar {
+  background-color: #f78fb3;
+}
+
+.horario-card-paciente .cancelar {
+  background-color: #d63384;
+}

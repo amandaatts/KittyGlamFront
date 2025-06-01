@@ -1,0 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Coiny&display=swap');
+
+.marcar-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.marcar-modal-card {
+  background: #FFDFF0;
+  padding: 50px;
+  border-radius: 50px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.marcar-kitty-icon {
+  width: 80px;
+  margin-bottom: 1rem;
+}
+
+.marcar-modal-label {
+  display: block;
+  margin: 1rem 0 0.5rem;
+  font-family: 'Coiny', cursive;
+  color: #DC678E;
+  text-align: center;
+}
+
+.marcar-modal-input {
+  width: 100%;
+  padding: 0.5rem;
+  background: #FFF3F9;
+  color: #DC678E;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  outline: none;
+  font-family: inherit;
+}
+
+.marcar-modal-input:focus {
+  border-color: #DC678E;
+}
+
+.marcar-modal-input::placeholder {
+  color: #DC678E;
+}
+
+/* Esconde ícone padrão do input date */
+.marcar-modal-input::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  display: none;
+}
+
+.marcar-input-with-icon {
+  position: relative;
+}
+
+.marcar-calendar-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  cursor: pointer;
+}
+
+.marcar-btn-concluir {
+  margin-top: 1rem;
+  background: #DC678E;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 25px;
+  font-family: 'Coiny', cursive;
+  cursor: pointer;
+}
+
+.marcar-btn-concluir:hover {
+  opacity: 0.9;
+}

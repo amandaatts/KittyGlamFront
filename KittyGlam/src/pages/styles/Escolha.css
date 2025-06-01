@@ -1,0 +1,69 @@
+@import url('https://fonts.googleapis.com/css2?family=Coiny&display=swap');
+
+.pagina-escolha {
+    height: 100vh;
+    width: 100vw;
+    background-color: #ffd6e7; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.pagina-escolha h1 {
+    font-family: 'Coiny', cursive;
+    color: #d94f7c;
+    font-size: 3.5rem;
+    margin-bottom: 3rem;
+}
+
+.botoes {
+    display: flex;
+    gap: 3rem;
+}
+
+.botao {
+    background-color: #FFE3F2;
+    border: 4px solid #D87596;
+    border-radius: 25px;
+    padding: 1.5rem;
+    text-align: center;
+    width: 200px;
+    height: 250px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    cursor: pointer;
+    transition: transform 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    outline: none; /* remove o contorno azul padrão */
+}
+
+.botao:hover {
+    transform: scale(1.1);
+    border-color: #D87596; /* mantém a borda rosa */
+    outline: none; /* remove o contorno no hover */
+}
+
+.botao:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.botao img {
+    width: 110px; /* largura maior da imagem */
+    height: auto; /* mantém proporção */
+    margin-bottom: 1rem;
+}
+
+.botao p {
+    color: #d94f7c;
+    font-weight: bold;
+    font-size: 1.3rem;
+}
+
+.no-account:hover {
+  text-decoration: underline;
+}

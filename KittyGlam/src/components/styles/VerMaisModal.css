@@ -1,0 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=Coiny&display=swap');
+
+.vermais-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.vermais-modal-card {
+  background: #FFDFF0;
+  padding: 50px;
+  border-radius: 50px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  text-align: center;
+  width: 380px; /* aumentada a largura */
+}
+
+.vermais-kitty-icon {
+  width: 80px;
+  margin-bottom: 1rem;
+}
+
+.vermais-modal-label {
+  display: block;
+  margin: 1rem 0 0.5rem;
+  font-family: 'Coiny', cursive;
+  color: #DC678E;
+  text-align: center;
+}
+
+.vermais-modal-input {
+  width: 100%;
+  padding: 0.5rem;
+  background: #FFF3F9;
+  color: #DC678E;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  font-family: inherit;
+  text-align: center;
+  font-weight: bold;
+}
+
+.vermais-btn-concluir {
+  margin-top: 1.5rem;
+  background: #F6699B;
+  color: white;
+  border: none;
+  padding: 0.8rem 2rem;
+  border-radius: 30px;
+  font-family: 'Coiny', cursive;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.vermais-btn-concluir:hover {
+  background: #e05589;
+}

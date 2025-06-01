@@ -1,0 +1,105 @@
+@import url('https://fonts.googleapis.com/css2?family=Coiny&display=swap');
+
+.login-medico-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: #FFD1E5;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+}
+
+.login-medico-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background: #FFD1E5;
+  padding: 48px 64px;
+  border-radius: 24px;
+}
+
+.login-medico-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 380px;
+  margin-right: 40px;
+}
+
+.login-medico-box h1 {
+  font-size: 40px;
+  margin-bottom: 32px;
+  font-weight: bold;
+  color: #d63384;
+  text-align: left;
+  font-family: 'Coiny', cursive;
+}
+
+.login-medico-box label {
+  font-size: 26px;
+  margin-bottom: 8px;
+  color: #d63384;
+}
+
+.login-medico-box input {
+  padding: 18px;
+  margin-bottom: 22px;
+  border: 2px solid #f78fb3;
+  border-radius: 12px;
+  background-color: #ffeaf5;
+  font-size: 22px;
+  width: 100%;
+}
+
+.login-medico-box button {
+  background-color: #f55da1;
+  color: white;
+  font-size: 32px;
+  font-weight: bold;
+  border: none;
+  border-radius: 30px;
+  padding: 12px 0;
+  cursor: pointer;
+  margin-top: 18px;
+  width: 100%;
+  font-family: 'Coiny', cursive;
+  transition: background 0.25s, color 0.25s;
+}
+
+.login-medico-box button:hover {
+  background-color: #e64991;
+}
+
+.no-account-medico {
+  margin-top: 18px;
+  text-align: center;
+  color: #c84b84;
+  font-size: 24px;
+  text-decoration: none;  
+  cursor: pointer;
+}
+
+.no-account-medico:hover {
+  text-decoration: underline;
+  color: #c84b84;         
+}
+
+
+.hello-kitty-img-medico {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hello-kitty-img-medico img {
+  height: 260px;
+  width: auto;
+}
+
+.erro-msg-medico {
+  color: #d63384;
+  margin-top: 8px;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  text-align: center;
+}

@@ -1,0 +1,151 @@
+@import url('https://fonts.googleapis.com/css2?family=Coiny&display=swap');
+
+.cadastro-bg {
+  width: 100vw;
+  height: 100vh;
+  background: #FFD1E5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+}
+
+.cadastro-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.cadastro-form {
+  display: flex;
+  flex-direction: column;
+  width: 280px;
+  margin-right: 24px;
+  padding: 16px 12px;
+  background: transparent;
+  border-radius: 12px;
+}
+
+.cadastro-form h1 {
+  font-family: 'Coiny', cursive, sans-serif;
+  font-size: 2rem;
+  margin-bottom: 16px;
+  color: #d63384;
+  font-weight: bold;
+  text-align: left;
+}
+
+.cadastro-form label {
+  font-size: 1rem;
+  color: #d63384;
+  margin-bottom: 4px;
+  margin-top: 10px;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+}
+
+.cadastro-form input,
+.cadastro-form select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px 10px;
+  border: 2px solid #E8729A;
+  border-radius: 8px;
+  background: #fff0f6;
+  font-size: 1rem;
+  color: #d63384;
+  margin-bottom: 10px;
+  outline: none;
+  appearance: none;
+  cursor: pointer;
+}
+
+/* Estilo específico para o campo de data com ícone */
+.input-icon-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.input-icon-wrapper input[type="date"] {
+  padding-left: 38px;
+  background: #fff0f6;
+  border: 2px solid #E8729A;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #d63384;
+  outline: none;
+  width: 100%;
+  height: 38px;
+}
+
+.input-icon-wrapper input[type="date"]:focus {
+  background: #fff0f6;
+  border-color: #E8729A;
+}
+
+.calendar-icone {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.cadastro-form button {
+  margin-top: 14px;
+  padding: 12px 0;
+  border: none;
+  border-radius: 20px;
+  background: #d63384;
+  color: #fff;
+  font-size: 25px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.25s, color 0.25s;
+  font-family: 'Coiny', cursive, sans-serif;
+}
+
+.cadastro-form button:hover {
+  background: #c8577c;
+  color: #fff;
+}
+
+.ja-tem-conta-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.ja-tem-conta-link {
+  margin-top: 18px;
+  text-align: center;
+  color: #c84b84;
+  font-size: 24px;
+  text-decoration: none;
+  transition: text-decoration 0.2s;
+}
+
+.ja-tem-conta-link:hover {
+  text-decoration: underline;
+  color: #c84b84;
+}
+
+.kitty-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.kitty-area img {
+  height: 300px;
+  width: auto;
+  margin-left: 0;
+  margin-top: 0;
+}
