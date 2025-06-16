@@ -3,19 +3,44 @@ import { useNavigate } from 'react-router-dom';
 import './styles/LoginProfissional.css';
 import helloKittyImg from '../assets/helloKitty.png';
 
-// ✅ Nome corrigido para bater com a rota no App.jsx
 export default function LoginProfissional() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [erro, setErro] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (email && senha) {
       setErro('');
-      // ✅ Corrigido para redirecionar para a rota correta
-      navigate('/profissional');
+
+      try {
+        const response = await fetch('http://localhost:8080/api/profissionais/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ email, senha })
+        });
+
+        if (response.ok) {
+          navigate('/profissional');
+        } else {
+          let errorMsg = 'Credenciais inválidas';
+          try {
+            const errorData = await response.json();
+            if (errorData.message) {
+              errorMsg = errorData.message;
+            }
+          } catch {
+            // Se não for possível ler o JSON, mantém a mensagem padrão
+          }
+          setErro(errorMsg);
+        }
+      } catch (error) {
+        setErro('Erro ao conectar com o servidor');
+      }
     } else {
       setErro('Por favor, preencha email e senha');
     }

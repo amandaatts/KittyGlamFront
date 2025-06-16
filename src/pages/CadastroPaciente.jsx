@@ -5,7 +5,7 @@ import './styles/CadastroPaciente.css';
 
 export default function Cadastro() {
   const navigate = useNavigate();
-  
+
   const [nome, setNome] = useState('');
   const [telefone, setTelefone] = useState('');
   const [dataNascimento, setDataNascimento] = useState('');
@@ -13,11 +13,36 @@ export default function Cadastro() {
   const [senha, setSenha] = useState('');
   const [erro, setErro] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (nome && telefone && dataNascimento && email && senha) {
       setErro('');
-      navigate('/login-paciente');
+
+      // Monta o objeto no formato do backend
+      const pacienteDTO = {
+        nome,
+        telefone,
+        dataNasc: dataNascimento,
+        email,
+        senha,
+      };
+
+      try {
+        const response = await fetch('http://localhost:8080/api/pacientes', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(pacienteDTO),
+        });
+
+        if (response.ok) {
+          navigate('/login-paciente');
+        } else {
+          const errorText = await response.text();
+          setErro(`Erro ao cadastrar: ${errorText}`);
+        }
+      } catch (error) {
+        setErro('Erro na conexão com o servidor');
+      }
     } else {
       setErro('Por favor, preencha todos os campos');
     }

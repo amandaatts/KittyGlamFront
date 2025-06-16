@@ -13,11 +13,37 @@ export default function CadastroProfissional() {
   const [senha, setSenha] = useState('');
   const [erro, setErro] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (nome && telefone && especialidade && email && senha) {
       setErro('');
-      navigate('/login-profissional');
+
+      try {
+        const response = await fetch('http://localhost:8080/api/profissionais', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            nome,
+            telefone,
+            especialidade,
+            email,
+            senha
+            // dataNasc não está no front, então não envia
+          })
+        });
+
+        if (response.ok) {
+          navigate('/login-profissional');
+        } else {
+          const errorData = await response.json();
+          setErro(errorData.message || 'Erro ao cadastrar profissional');
+        }
+      } catch (error) {
+        setErro('Erro ao conectar com o servidor');
+      }
+
     } else {
       setErro('Por favor, preencha todos os campos');
     }
@@ -96,4 +122,4 @@ export default function CadastroProfissional() {
       </div>
     </div>
   );
-} 
+}

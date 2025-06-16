@@ -1,53 +1,119 @@
-import React, { useState, useEffect, useRef } from 'react';
-import './styles/MarcarModal.css';
-import kittyLogo from '../assets/KittyLogo.png';
-import calendarIcon from '../assets/calendario.png';
+import React, { useState, useEffect, useRef } from "react";
+import kittyLogo from "../assets/KittyLogo.png";
+import calendarIcon from "../assets/calendario.png";
+import "./styles/MarcarModal.css";
 
-export default function MarcarModal({ isOpen, onClose, onSubmit }) {
-  const [especialidade, setEspecialidade] = useState('');
-  const [dataConsulta, setDataConsulta] = useState('');
-  const [profissional, setProfissional] = useState('');
-  const [paciente, setPaciente] = useState('');
+export default function MarcarModal({ isOpen, onClose }) {
+  const [especialidade, setEspecialidade] = useState("");
+  const [dataConsulta, setDataConsulta] = useState("");
+  const [profissional, setProfissional] = useState("");
+  const [profissionaisFiltrados, setProfissionaisFiltrados] = useState([]);
+  const [paciente, setPaciente] = useState({ id: "", nome: "" });
 
   const modalRef = useRef(null);
 
   useEffect(() => {
+    function handleClickOutside(event) {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        onClose();
+      }
+    }
     if (isOpen) {
-      setEspecialidade('');
-      setDataConsulta('');
-      setProfissional('');
-      setPaciente('');
+      document.addEventListener("mousedown", handleClickOutside);
     }
-  }, [isOpen]);
-
-  const handleClickOutside = (event) => {
-    if (modalRef.current && !modalRef.current.contains(event.target)) {
-      onClose();
-    }
-  };
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen, onClose]);
 
   useEffect(() => {
     if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-    } else {
-      document.removeEventListener('mousedown', handleClickOutside);
+      setEspecialidade("");
+      setDataConsulta("");
+      setProfissional("");
+      try {
+        const userStr = localStorage.getItem("usuarioLogado");
+        if (userStr) {
+          let user = JSON.parse(userStr);
+          if (typeof user === "string") user = JSON.parse(user);
+          if (user && user.id && user.nome) {
+            setPaciente({ id: user.id, nome: user.nome });
+          }
+        }
+      } catch (err) {
+        console.error("Erro ao ler paciente do localStorage:", err);
+      }
     }
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
   }, [isOpen]);
 
-  const handleConcluir = (e) => {
-    e.preventDefault();
-    if (onSubmit) {
-      onSubmit({
-        especialidade,
-        data: dataConsulta,
-        profissional,
-        paciente
-      });
+  useEffect(() => {
+    if (especialidade) {
+      fetch(
+        `http://localhost:8080/consultas/profissionais-por-especialidade?especialidade=${especialidade}`
+      )
+        .then((res) => {
+          if (!res.ok) throw new Error("Erro na resposta do servidor");
+          return res.json();
+        })
+        .then((data) => setProfissionaisFiltrados(data))
+        .catch((err) => {
+          console.error("Erro ao buscar profissionais:", err);
+          setProfissionaisFiltrados([]);
+        });
+    } else {
+      setProfissionaisFiltrados([]);
     }
-  };
+  }, [especialidade]);
+
+  async function handleConcluir(e) {
+    e.preventDefault();
+
+    if (!dataConsulta || !profissional || !paciente.id) {
+      alert("Preencha todos os campos.");
+      return;
+    }
+
+    try {
+      // Busca consultas para evitar conflito de horários
+      const res = await fetch("http://localhost:8080/consultas");
+      if (!res.ok) throw new Error("Erro ao buscar consultas existentes");
+
+      const consultasExistentes = await res.json();
+
+      const existeConsultaMesmoProfissionalMesmoDia = consultasExistentes.some(
+        (c) =>
+          c.profissional.id === parseInt(profissional, 10) &&
+          c.dataConsulta === dataConsulta
+      );
+
+      if (existeConsultaMesmoProfissionalMesmoDia) {
+        alert("Esse profissional já possui uma consulta nessa data.");
+        return;
+      }
+
+      const novaConsulta = {
+        dataConsulta,
+        profissionalId: profissional,
+        pacienteId: paciente.id,
+      };
+
+      const response = await fetch("http://localhost:8080/consultas", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(novaConsulta),
+      });
+
+      if (response.ok) {
+        alert("Consulta marcada com sucesso!");
+        onClose();
+      } else {
+        alert("Erro ao marcar consulta.");
+      }
+    } catch (error) {
+      console.error("Erro ao marcar consulta:", error);
+      alert("Erro ao conectar com o servidor.");
+    }
+  }
 
   if (!isOpen) return null;
 
@@ -63,7 +129,9 @@ export default function MarcarModal({ isOpen, onClose, onSubmit }) {
             className="marcar-modal-input"
             required
           >
-            <option value="" disabled>Selecione…</option>
+            <option value="" disabled>
+              Selecione…
+            </option>
             <option value="design-sobrancelha">Design sobrancelha</option>
             <option value="manicure">Manicure</option>
             <option value="alongamento-cilios">Alongamento de cílios</option>
@@ -75,7 +143,7 @@ export default function MarcarModal({ isOpen, onClose, onSubmit }) {
           <div className="marcar-input-with-icon">
             <input
               type="date"
-              id="marcar-dataConsulta"   
+              id="marcar-dataConsulta"
               value={dataConsulta}
               onChange={(e) => setDataConsulta(e.target.value)}
               className="marcar-modal-input"
@@ -85,32 +153,41 @@ export default function MarcarModal({ isOpen, onClose, onSubmit }) {
               src={calendarIcon}
               alt="Abrir calendário"
               className="marcar-calendar-icon"
-              onClick={() => document.querySelector('#marcar-dataConsulta')?.showPicker?.()}
-              tabIndex="0"
+              onClick={() =>
+                document.querySelector("#marcar-dataConsulta")?.showPicker?.()
+              }
+              tabIndex={0}
             />
           </div>
 
           <label className="marcar-modal-label">Profissional:</label>
-          <input
-            type="text"
-            placeholder="Nome do profissional"
+          <select
             value={profissional}
             onChange={(e) => setProfissional(e.target.value)}
             className="marcar-modal-input"
             required
-          />
+          >
+            <option value="" disabled>
+              Selecione…
+            </option>
+            {profissionaisFiltrados.map((prof) => (
+              <option key={prof.id} value={prof.id}>
+                {prof.nome}
+              </option>
+            ))}
+          </select>
 
           <label className="marcar-modal-label">Paciente:</label>
           <input
             type="text"
-            placeholder="Nome do paciente"
-            value={paciente}
-            onChange={(e) => setPaciente(e.target.value)}
+            value={paciente.nome}
+            readOnly
             className="marcar-modal-input"
-            required
           />
 
-          <button type="submit" className="marcar-btn-concluir">Concluir</button>
+          <button type="submit" className="marcar-btn-concluir">
+            Concluir
+          </button>
         </form>
       </div>
     </div>

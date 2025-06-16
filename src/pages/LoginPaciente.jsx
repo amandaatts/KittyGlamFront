@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './styles/LoginProfissional.css'; // usa o mesmo CSS do profissional, sem problema
+import './styles/LoginProfissional.css';
 import helloKittyImg from '../assets/helloKitty.png';
 
 export default function LoginPaciente() {
@@ -9,13 +9,31 @@ export default function LoginPaciente() {
   const [senha, setSenha] = useState('');
   const [erro, setErro] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (email && senha) {
-      setErro('');
-      navigate('/paciente'); // ✅ ALTERAÇÃO ÚNICA AQUI
-    } else {
+    if (!email || !senha) {
       setErro('Por favor, preencha email e senha');
+      return;
+    }
+
+    setErro('');
+    try {
+      const response = await fetch('http://localhost:8080/api/pacientes/login', {  
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, senha }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();  // pega os dados do paciente logado
+        localStorage.setItem('usuarioLogado', JSON.stringify(data));  // salva no localStorage
+        navigate('/paciente');  // navega para a página do paciente
+      } else {
+        const data = await response.text();
+        setErro(data || 'Email ou senha inválidos');
+      }
+    } catch (error) {
+      setErro('Erro ao conectar com o servidor');
     }
   };
 

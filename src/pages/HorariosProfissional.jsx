@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './styles/HorariosProfissional.css';
 import kittyLogo from '../assets/KittyLogo.png';
@@ -6,56 +6,50 @@ import homeIcon from '../assets/home-icon.png';
 import menuIcon from '../assets/menu-icon.png';
 import VerMaisModal from '../components/VerMaisModal';
 
-export default function HorariosProfissional({ consultas, setConsultas }) {
+export default function HorariosProfissional() {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(true);
   const [modalAberto, setModalAberto] = useState(false);
   const [consultaSelecionada, setConsultaSelecionada] = useState(null);
+  const [consultas, setConsultas] = useState([]);
 
-  const [filtroEspecialidade, setFiltroEspecialidade] = useState('');
-  const [filtroProfissional, setFiltroProfissional] = useState('');
-  const [filtroData, setFiltroData] = useState('');
+  useEffect(() => {
+    fetch('http://localhost:8080/consultas')
+      .then((res) => res.json())
+      .then((data) => setConsultas(data))
+      .catch((err) => console.error('Erro ao buscar consultas:', err));
+  }, []);
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
 
-  const cancelarConsulta = (index) => {
-    const novaLista = consultas.filter((_, i) => i !== index);
-    setConsultas(novaLista);
+  const cancelarConsulta = async (id) => {
+    try {
+      await fetch(`http://localhost:8080/consultas/${id}`, { method: 'DELETE' });
+      setConsultas((prev) => prev.filter((c) => c.id !== id));
+    } catch (err) {
+      console.error('Erro ao cancelar consulta:', err);
+    }
   };
 
-  const abrirModalVerMais = (index) => {
-    setConsultaSelecionada(index);
+  const abrirModalVerMais = (consulta) => {
+    setConsultaSelecionada(consulta);
     setModalAberto(true);
   };
 
   const formatarData = (dataISO) => {
+    if (!dataISO) return '';
     const [ano, mes, dia] = dataISO.split('-');
-    return `${dia}-${mes}-${ano}`;
+    return `${dia}/${mes}/${ano}`;
   };
-
-  // ✅ Correção aqui: uso direto de consulta.profissional como string
-  const consultasFiltradas = consultas.filter((consulta) => {
-    const matchEspecialidade = consulta.especialidade
-      .toLowerCase()
-      .includes(filtroEspecialidade.toLowerCase());
-
-    const matchProfissional = (consulta.profissional || '')
-      .toLowerCase()
-      .includes(filtroProfissional.toLowerCase());
-
-    const matchData = filtroData === '' || consulta.data === filtroData;
-
-    return matchEspecialidade && matchProfissional && matchData;
-  });
 
   return (
     <div className="prof-container">
       <div className={`prof-sidebar ${menuOpen ? 'open' : 'closed'}`}>
-        <div className="prof-menu-icon" onClick={toggleMenu} style={{ cursor: 'pointer' }}>
+        <div className="prof-menu-icon" onClick={toggleMenu}>
           <img src={menuIcon} alt="Menu" />
         </div>
         {menuOpen && (
-          <div className="prof-home-icon" onClick={() => navigate('/profissional')} style={{ cursor: 'pointer' }}>
+          <div className="prof-home-icon" onClick={() => navigate('/profissional')}>
             <img src={homeIcon} alt="Home" />
           </div>
         )}
@@ -73,38 +67,31 @@ export default function HorariosProfissional({ consultas, setConsultas }) {
         <div className="prof-consultas-container">
           <h2 className="prof-consultas-title">Minhas Consultas</h2>
 
-          {/* 🔍 Barra de Pesquisa */}
-          <div className="prof-filtros-container">
-            <input
-              type="text"
-              placeholder="Filtrar por especialidade"
-              value={filtroEspecialidade}
-              onChange={(e) => setFiltroEspecialidade(e.target.value)}
-            />
-            <input
-              type="text"
-              placeholder="Filtrar por profissional"
-              value={filtroProfissional}
-              onChange={(e) => setFiltroProfissional(e.target.value)}
-            />
-            <input
-              type="date"
-              value={filtroData}
-              onChange={(e) => setFiltroData(e.target.value)}
-            />
-          </div>
-
-          {consultasFiltradas.map((consulta, index) => (
-            <div className="prof-consulta-card" key={index}>
-              <div className="prof-consulta-dia">{consulta.data.split('-')[2]}</div>
+          {consultas.map((consulta) => (
+            <div className="prof-consulta-card" key={consulta.id}>
+              <div className="prof-consulta-dia">{consulta.dataConsulta?.split('-')[2]}</div>
               <div className="prof-consulta-info">
-                <strong>{consulta.especialidade}</strong>
-                <span>{consulta.paciente}</span><br />
-                <small>Data: {formatarData(consulta.data)}</small>
+                <strong>
+                  {consulta.especialidade === 'design-sobrancelha'
+                    ? 'Design sobrancelha'
+                    : consulta.especialidade}
+                </strong>
+                <span>{consulta.nomePaciente || 'Paciente não informado'}</span><br />
+                <small>Data: {formatarData(consulta.dataConsulta)}</small>
               </div>
               <div className="prof-consulta-botoes">
-                <button className="prof-btn-vermais" onClick={() => abrirModalVerMais(index)}>Ver Mais</button>
-                <button className="prof-btn-cancelar" onClick={() => cancelarConsulta(index)}>Cancelar</button>
+                <button
+                  className="prof-btn-vermais"
+                  onClick={() => abrirModalVerMais(consulta)}
+                >
+                  Ver Mais
+                </button>
+                <button
+                  className="prof-btn-cancelar"
+                  onClick={() => cancelarConsulta(consulta.id)}
+                >
+                  Cancelar
+                </button>
               </div>
             </div>
           ))}
@@ -113,7 +100,7 @@ export default function HorariosProfissional({ consultas, setConsultas }) {
         <VerMaisModal
           isOpen={modalAberto}
           onClose={() => setModalAberto(false)}
-          consulta={consultas[consultaSelecionada]}
+          consulta={consultaSelecionada}
         />
       </div>
     </div>
