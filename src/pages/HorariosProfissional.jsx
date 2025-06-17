@@ -12,13 +12,26 @@ export default function HorariosProfissional() {
   const [modalAberto, setModalAberto] = useState(false);
   const [consultaSelecionada, setConsultaSelecionada] = useState(null);
   const [consultas, setConsultas] = useState([]);
+  const [profissional, setProfissional] = useState({ id: '', nome: '' });
 
   useEffect(() => {
-    fetch('http://localhost:8080/consultas')
+    const userStr = localStorage.getItem('usuarioLogado');
+    if (userStr) {
+      let user = JSON.parse(userStr);
+      if (typeof user === 'string') user = JSON.parse(user);
+      if (user && user.id && user.nome) {
+        setProfissional({ id: user.id, nome: user.nome });
+        buscarConsultas(user.id);
+      }
+    }
+  }, []);
+
+  const buscarConsultas = (profissionalId) => {
+    fetch(`http://localhost:8080/consultas/profissional/${profissionalId}`)
       .then((res) => res.json())
       .then((data) => setConsultas(data))
       .catch((err) => console.error('Erro ao buscar consultas:', err));
-  }, []);
+  };
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
 
@@ -60,6 +73,7 @@ export default function HorariosProfissional() {
           <div className="prof-logo-container">
             <img src={kittyLogo} alt="KittyGlam Logo" className="prof-kitty-logo" />
           </div>
+          <h2 className="prof-user-title">Bem-vinda, {profissional.nome}</h2>
         </header>
 
         <div className="prof-divider"></div>
@@ -67,34 +81,41 @@ export default function HorariosProfissional() {
         <div className="prof-consultas-container">
           <h2 className="prof-consultas-title">Minhas Consultas</h2>
 
-          {consultas.map((consulta) => (
-            <div className="prof-consulta-card" key={consulta.id}>
-              <div className="prof-consulta-dia">{consulta.dataConsulta?.split('-')[2]}</div>
-              <div className="prof-consulta-info">
-                <strong>
-                  {consulta.especialidade === 'design-sobrancelha'
-                    ? 'Design sobrancelha'
-                    : consulta.especialidade}
-                </strong>
-                <span>{consulta.nomePaciente || 'Paciente não informado'}</span><br />
-                <small>Data: {formatarData(consulta.dataConsulta)}</small>
+          {consultas.length === 0 ? (
+            <p className="prof-sem-consultas">Nenhuma consulta marcada.</p>
+          ) : (
+            consultas.map((consulta) => (
+              <div className="prof-consulta-card" key={consulta.id}>
+                <div className="prof-consulta-dia">
+                  {consulta.dataConsulta?.split('-')[2]}
+                </div>
+                <div className="prof-consulta-info">
+                  <strong>
+                    {consulta.especialidade === 'design-sobrancelha'
+                      ? 'Design sobrancelha'
+                      : consulta.especialidade}
+                  </strong>
+                  <span>{consulta.nomePaciente || 'Paciente não informado'}</span>
+                  <br />
+                  <small>Data: {formatarData(consulta.dataConsulta)}</small>
+                </div>
+                <div className="prof-consulta-botoes">
+                  <button
+                    className="prof-btn-vermais"
+                    onClick={() => abrirModalVerMais(consulta)}
+                  >
+                    Ver Mais
+                  </button>
+                  <button
+                    className="prof-btn-cancelar"
+                    onClick={() => cancelarConsulta(consulta.id)}
+                  >
+                    Cancelar
+                  </button>
+                </div>
               </div>
-              <div className="prof-consulta-botoes">
-                <button
-                  className="prof-btn-vermais"
-                  onClick={() => abrirModalVerMais(consulta)}
-                >
-                  Ver Mais
-                </button>
-                <button
-                  className="prof-btn-cancelar"
-                  onClick={() => cancelarConsulta(consulta.id)}
-                >
-                  Cancelar
-                </button>
-              </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
 
         <VerMaisModal

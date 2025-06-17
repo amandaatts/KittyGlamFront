@@ -6,7 +6,7 @@ import kittyLogo from '../assets/KittyLogo.png';
 import homeIcon from '../assets/home-icon.png';
 import menuIcon from '../assets/menu-icon.png';
 
-import relatoriosImg from '../assets/relatorios.png'; 
+import relatoriosImg from '../assets/relatorios.png';
 import horariosMarcadosImg from '../assets/horarios-marcados.png';
 import localizacaoClinicaImg from '../assets/localizacao-clinica.png';
 import faleConoscoImg from '../assets/fale-conosco.png';
@@ -17,8 +17,10 @@ export default function Profissional() {
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
 
-  // Pega o ID do profissional logado no localStorage
-  const profissionalId = Number(localStorage.getItem('profissionalId'));
+  // Pegando o ID do profissional logado corretamente do localStorage
+  const userStr = localStorage.getItem('usuarioLogado');
+  const profissional = userStr ? JSON.parse(userStr) : null;
+  const profissionalId = profissional?.id;
 
   // URL base do backend (ajuste aqui se mudar de ambiente)
   const API_BASE_URL = 'http://localhost:8080';

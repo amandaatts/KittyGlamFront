@@ -27,8 +27,8 @@ export default function LoginProfissional() {
         if (response.ok) {
           const data = await response.json();
 
-          // Salva o id do profissional no localStorage
-          localStorage.setItem('profissionalId', data.id);
+          // Salva o objeto do profissional (com id e nome) no localStorage
+          localStorage.setItem('usuarioLogado', JSON.stringify(data));
 
           navigate('/profissional');
         } else {
