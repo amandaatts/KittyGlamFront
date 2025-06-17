@@ -1,4 +1,3 @@
-// src/pages/Profissional.jsx
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './styles/Profissional.css';
@@ -18,13 +17,39 @@ export default function Profissional() {
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
 
-  const baixarRelatorio = () => {
-    const link = document.createElement('a');
-    link.href = '/relatorio-consultas.pdf'; // Arquivo precisa estar na pasta public/
-    link.download = 'relatorio-consultas.pdf';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  // Pega o ID do profissional logado no localStorage
+  const profissionalId = Number(localStorage.getItem('profissionalId'));
+
+  // URL base do backend (ajuste aqui se mudar de ambiente)
+  const API_BASE_URL = 'http://localhost:8080';
+
+  const baixarRelatorio = async () => {
+    if (!profissionalId) {
+      alert('Erro: ID do profissional não encontrado. Faça login novamente.');
+      return;
+    }
+    try {
+      const response = await fetch(`${API_BASE_URL}/relatorios/profissional/${profissionalId}`, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/pdf',
+        },
+      });
+
+      if (!response.ok) throw new Error('Erro ao gerar o relatório');
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `relatorio_profissional_${profissionalId}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      alert('Erro ao baixar relatório: ' + error.message);
+    }
   };
 
   return (
@@ -50,17 +75,18 @@ export default function Profissional() {
         <div className="profissional-divider"></div>
 
         <div className="profissional-cards-container">
-          <div className="profissional-card" onClick={baixarRelatorio}>
+          <div className="profissional-card" onClick={baixarRelatorio} style={{ cursor: 'pointer' }}>
             <img src={relatoriosImg} alt="Relatórios" />
           </div>
 
-          <div className="profissional-card" onClick={() => navigate('/horarios-profissional')}>
+          <div className="profissional-card" onClick={() => navigate('/horarios-profissional')} style={{ cursor: 'pointer' }}>
             <img src={horariosMarcadosImg} alt="Horários Marcados" />
           </div>
 
           <div
             className="profissional-card"
             onClick={() => window.open('https://www.google.com/maps/place/Sua+Clínica+Aqui', '_blank')}
+            style={{ cursor: 'pointer' }}
           >
             <img src={localizacaoClinicaImg} alt="Localização da Clínica" />
           </div>
@@ -68,6 +94,7 @@ export default function Profissional() {
           <div
             className="profissional-card"
             onClick={() => window.open('https://wa.me/5599999999999', '_blank')}
+            style={{ cursor: 'pointer' }}
           >
             <img src={faleConoscoImg} alt="Fale Conosco" />
           </div>

@@ -1,4 +1,3 @@
-// src/App.jsx
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useState } from 'react';
 
@@ -33,6 +32,7 @@ function App() {
         <Route path="/login-profissional" element={<LoginProfissional />} />
         <Route path="/cadastro-profissional" element={<CadastroProfissional />} />
         <Route path="/login-paciente" element={<LoginPaciente />} />
+        <Route path="/login" element={<LoginPaciente />} /> {/* ✅ NOVA ROTA ADICIONADA */}
         <Route path="/cadastro-paciente" element={<CadastroPaciente />} />
         <Route path="/paciente" element={<Paciente />} />
         <Route path="/profissional" element={<Profissional />} />

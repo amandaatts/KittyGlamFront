@@ -25,6 +25,11 @@ export default function LoginProfissional() {
         });
 
         if (response.ok) {
+          const data = await response.json();
+
+          // Salva o id do profissional no localStorage
+          localStorage.setItem('profissionalId', data.id);
+
           navigate('/profissional');
         } else {
           let errorMsg = 'Credenciais inválidas';
@@ -34,7 +39,7 @@ export default function LoginProfissional() {
               errorMsg = errorData.message;
             }
           } catch {
-            // Se não for possível ler o JSON, mantém a mensagem padrão
+            // mantém a mensagem padrão
           }
           setErro(errorMsg);
         }

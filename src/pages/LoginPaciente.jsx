@@ -18,16 +18,17 @@ export default function LoginPaciente() {
 
     setErro('');
     try {
-      const response = await fetch('http://localhost:8080/api/pacientes/login', {  
+      const response = await fetch('http://localhost:8080/api/pacientes/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, senha }),
       });
 
       if (response.ok) {
-        const data = await response.json();  // pega os dados do paciente logado
-        localStorage.setItem('usuarioLogado', JSON.stringify(data));  // salva no localStorage
-        navigate('/paciente');  // navega para a página do paciente
+        const data = await response.json();  // Ex: { id: 1, nome: "João", ... }
+        localStorage.setItem('usuarioLogado', JSON.stringify(data));
+        localStorage.setItem('pacienteId', data.id); // <- Aqui você salva o ID
+        navigate('/paciente');
       } else {
         const data = await response.text();
         setErro(data || 'Email ou senha inválidos');

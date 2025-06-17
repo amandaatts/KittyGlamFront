@@ -6,12 +6,33 @@ import "./styles/MarcarModal.css";
 export default function MarcarModal({ isOpen, onClose }) {
   const [especialidade, setEspecialidade] = useState("");
   const [dataConsulta, setDataConsulta] = useState("");
-  const [profissional, setProfissional] = useState("");
+  const [profissionalId, setProfissionalId] = useState("");
   const [profissionaisFiltrados, setProfissionaisFiltrados] = useState([]);
   const [paciente, setPaciente] = useState({ id: "", nome: "" });
 
   const modalRef = useRef(null);
 
+  // Função para buscar profissionais por especialidade (reutilizável)
+  function buscarProfissionais(espec) {
+    if (espec) {
+      fetch(
+        `http://localhost:8080/consultas/profissionais-por-especialidade?especialidade=${espec}`
+      )
+        .then((res) => {
+          if (!res.ok) throw new Error("Erro na resposta do servidor");
+          return res.json();
+        })
+        .then((data) => setProfissionaisFiltrados(data))
+        .catch((err) => {
+          console.error("Erro ao buscar profissionais:", err);
+          setProfissionaisFiltrados([]);
+        });
+    } else {
+      setProfissionaisFiltrados([]);
+    }
+  }
+
+  // Fechar modal clicando fora
   useEffect(() => {
     function handleClickOutside(event) {
       if (modalRef.current && !modalRef.current.contains(event.target)) {
@@ -26,11 +47,13 @@ export default function MarcarModal({ isOpen, onClose }) {
     };
   }, [isOpen, onClose]);
 
+  // Resetar campos e pegar paciente do localStorage quando abrir modal
   useEffect(() => {
     if (isOpen) {
       setEspecialidade("");
       setDataConsulta("");
-      setProfissional("");
+      setProfissionalId("");
+      setProfissionaisFiltrados([]);
       try {
         const userStr = localStorage.getItem("usuarioLogado");
         if (userStr) {
@@ -46,54 +69,26 @@ export default function MarcarModal({ isOpen, onClose }) {
     }
   }, [isOpen]);
 
+  // Sempre que especialidade muda, buscar profissionais
   useEffect(() => {
-    if (especialidade) {
-      fetch(
-        `http://localhost:8080/consultas/profissionais-por-especialidade?especialidade=${especialidade}`
-      )
-        .then((res) => {
-          if (!res.ok) throw new Error("Erro na resposta do servidor");
-          return res.json();
-        })
-        .then((data) => setProfissionaisFiltrados(data))
-        .catch((err) => {
-          console.error("Erro ao buscar profissionais:", err);
-          setProfissionaisFiltrados([]);
-        });
-    } else {
-      setProfissionaisFiltrados([]);
-    }
+    buscarProfissionais(especialidade);
+    // Também resetar o profissional selecionado para evitar inconsistencia
+    setProfissionalId("");
   }, [especialidade]);
 
+  // Enviar dados para backend para salvar consulta
   async function handleConcluir(e) {
     e.preventDefault();
 
-    if (!dataConsulta || !profissional || !paciente.id) {
+    if (!dataConsulta || !profissionalId || !paciente.id) {
       alert("Preencha todos os campos.");
       return;
     }
 
     try {
-      // Busca consultas para evitar conflito de horários
-      const res = await fetch("http://localhost:8080/consultas");
-      if (!res.ok) throw new Error("Erro ao buscar consultas existentes");
-
-      const consultasExistentes = await res.json();
-
-      const existeConsultaMesmoProfissionalMesmoDia = consultasExistentes.some(
-        (c) =>
-          c.profissional.id === parseInt(profissional, 10) &&
-          c.dataConsulta === dataConsulta
-      );
-
-      if (existeConsultaMesmoProfissionalMesmoDia) {
-        alert("Esse profissional já possui uma consulta nessa data.");
-        return;
-      }
-
       const novaConsulta = {
         dataConsulta,
-        profissionalId: profissional,
+        profissionalId,
         pacienteId: paciente.id,
       };
 
@@ -105,7 +100,11 @@ export default function MarcarModal({ isOpen, onClose }) {
 
       if (response.ok) {
         alert("Consulta marcada com sucesso!");
-        onClose();
+
+        // Atualizar a lista de profissionais para refletir qualquer mudança, se necessário
+        buscarProfissionais(especialidade);
+
+        onClose(); // Fecha o modal após salvar
       } else {
         alert("Erro ao marcar consulta.");
       }
@@ -162,8 +161,8 @@ export default function MarcarModal({ isOpen, onClose }) {
 
           <label className="marcar-modal-label">Profissional:</label>
           <select
-            value={profissional}
-            onChange={(e) => setProfissional(e.target.value)}
+            value={profissionalId}
+            onChange={(e) => setProfissionalId(e.target.value)}
             className="marcar-modal-input"
             required
           >
